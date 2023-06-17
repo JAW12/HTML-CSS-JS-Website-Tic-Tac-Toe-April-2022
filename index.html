@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        .center{
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+        *{
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .map{
+            border: 3px solid black;
+            border-radius: 25px;
+            display: grid;
+            grid-gap: 30px;
+            padding: 20px;
+            grid-template-columns: auto auto auto;
+            box-sizing: border-box;
+        }
+
+        .cell{
+            box-sizing: border-box;
+            border: 3px solid black;
+            border-radius: 25px;
+            text-align: center;
+            color: white;
+            width: 100px;
+            height: 100px;
+            font-size: 50px;
+            line-height: 2;
+            cursor: pointer;
+        }
+
+        [class="cell"]:hover{
+            background-color:gainsboro;
+        }
+
+        .O, .X, .Y{
+            border: 0;
+            cursor:default;
+        }
+
+        .O{
+            background-color: #0275d8;
+        }
+
+        .X{
+            background-color: #d9534f;
+        }
+
+        .Y{
+            background-color: #5cb85c;
+        }
+
+        #reset{
+            cursor: pointer;
+            margin-top: 15px;
+            padding: 10px;
+            width: 100px;
+            background-color: #d9534f;
+            border-radius: 10px;
+            border: 0;
+            color: white;
+            font-size: 1.5em;
+        }
+
+        #reset:hover{
+            background-color: #c54d49;
+        }
+    </style>
+</head>
+<body>
+    <div class="center">
+        <h1 id="turn">Turn : O</h1>
+        <div class="map" style="width: 420px; height: 420px">
+            <div class="cell" id="0"></div>
+            <div class="cell" id="1"></div>
+            <div class="cell" id="2"></div>
+            <div class="cell" id="3"></div>
+            <div class="cell" id="4"></div>
+            <div class="cell" id="5"></div>
+            <div class="cell" id="6"></div>
+            <div class="cell" id="7"></div>
+            <div class="cell" id="8"></div>
+        </div>
+        <button id="reset">Reset</button>
+    </div>
+    <script>
+        let ctrTurn = 0;
+        let ctrClick = 0;
+        let char = "O";
+        let win = "";
+        let turn = document.getElementById('turn');
+        let cells = document.querySelectorAll('.cell');
+        for(let i =0; i < cells.length; i++){
+            let cell = cells[i];
+            cell.addEventListener('click', function(){
+                if(cell.classList.length == 1 && win == ""){
+                    cell.classList. add(char);
+                    cell.innerHTML = char;
+                    ctrTurn++;
+                    ctrClick++;
+                    if(ctrTurn > 1){
+                        ctrTurn = 0;
+                        char = "O";
+                    }
+                    else{
+                        char = "X";
+                    }
+                    turn.innerHTML = "Turn : " + char;
+
+                    //check horizontal 1
+                    if(cells[0].innerHTML != "" && cells[0].innerHTML == cells[1].innerHTML && cells[1].innerHTML == cells[2].innerHTML){
+                        cells[0].classList.add('Y');
+                        cells[1].classList.add('Y');
+                        cells[2].classList.add('Y');
+                        win = cells[0].innerHTML;
+                    }
+                    //check horizontal 2
+                    if(cells[3].innerHTML != "" && cells[3].innerHTML == cells[4].innerHTML && cells[4].innerHTML == cells[5].innerHTML){
+                        cells[3].classList.add('Y');
+                        cells[4].classList.add('Y');
+                        cells[5].classList.add('Y');
+                        win = cells[3].innerHTML;
+                    }
+                    //check horizontal 3
+                    if(cells[6].innerHTML != "" && cells[6].innerHTML == cells[7].innerHTML && cells[7].innerHTML == cells[8].innerHTML){
+                        cells[6].classList.add('Y');
+                        cells[7].classList.add('Y');
+                        cells[8].classList.add('Y');
+                        win = cells[6].innerHTML;
+                    }
+                    
+                    //check vertical 1
+                    if(cells[0].innerHTML != "" && cells[0].innerHTML == cells[3].innerHTML && cells[3].innerHTML == cells[6].innerHTML){
+                        cells[0].classList.add('Y');
+                        cells[3].classList.add('Y');
+                        cells[6].classList.add('Y');
+                        win = cells[0].innerHTML;
+                    }
+                    //check vertical 2
+                    if(cells[1].innerHTML != "" && cells[1].innerHTML == cells[4].innerHTML && cells[4].innerHTML == cells[7].innerHTML){
+                        cells[1].classList.add('Y');
+                        cells[4].classList.add('Y');
+                        cells[7].classList.add('Y');
+                        win = cells[1].innerHTML;
+                    }
+                    //check vertical 3
+                    if(cells[2].innerHTML != "" && cells[2].innerHTML == cells[5].innerHTML && cells[5].innerHTML == cells[8].innerHTML){
+                        cells[2].classList.add('Y');
+                        cells[5].classList.add('Y');
+                        cells[8].classList.add('Y');
+                        win = cells[2].innerHTML;
+                    }
+                    
+                    //check diagonal 1
+                    if(cells[0].innerHTML != "" && cells[0].innerHTML == cells[4].innerHTML && cells[4].innerHTML == cells[8].innerHTML){
+                        cells[0].classList.add('Y');
+                        cells[4].classList.add('Y');
+                        cells[8].classList.add('Y');
+                        win = cells[0].innerHTML;
+                    }
+                    //check diagonal 2
+                    if(cells[2].innerHTML != "" && cells[2].innerHTML == cells[4].innerHTML && cells[4].innerHTML == cells[6].innerHTML){
+                        cells[2].classList.add('Y');
+                        cells[4].classList.add('Y');
+                        cells[6].classList.add('Y');
+                        win = cells[2].innerHTML;
+                    }
+                    if(win != ""){
+                        alert("Winner : " + win)
+                    }
+                    if(ctrClick == 9 && win == ""){
+                        alert("Game Draw!");
+                    }
+                }
+            })
+        }
+
+        let reset = document.getElementById('reset').addEventListener('click', function(){
+            ctrTurn = 0;
+            ctrClick = 0;
+            win = "";
+            char = "O";
+            turn.innerHTML = "Turn : " + char;
+            let cells = document.querySelectorAll('.cell');
+            cells.forEach(cell => {
+                cell.classList.remove('Y');
+                cell.classList.remove('X');
+                cell.classList.remove('O');
+                cell.classList.add('cell');
+                cell.innerHTML = "";
+            })
+        });
+        
+    </script>
+</body>
+</html>
